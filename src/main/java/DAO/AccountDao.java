@@ -45,4 +45,17 @@ public class AccountDao {
         }
     }
     
+    public static boolean idExists(int account_id) {
+        try {
+            Connection db = ConnectionUtil.getConnection();
+
+            PreparedStatement sql = db.prepareStatement("SELECT * FROM account WHERE account_id = ?;");
+            sql.setInt(1, account_id);
+
+            ResultSet result = sql.executeQuery();
+            return result.next();
+        } catch (Exception e) {
+            return false;
+        }
+    }
 }

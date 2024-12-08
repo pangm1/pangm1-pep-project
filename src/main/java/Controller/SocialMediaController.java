@@ -23,10 +23,10 @@ public class SocialMediaController {
         app.post("login", this::loginHandler);
         app.post("messages", this::postHandler);
         app.get("messages", this::getMessagesHandler);
-        app.get("messages/(message_id)", this::getOneMessageHandler);
-        app.delete("messages/(message_id)", this::deleteMessageHandler);
-        app.patch("messages/(message_id)", this::updateMessageHandler);
-        app.get("accounts/(account_id)/messages", this::accountMessagesHandler);
+        app.get("messages/{message_id}", this::getOneMessageHandler);
+        app.delete("messages/{message_id}", this::deleteMessageHandler);
+        app.patch("messages/{message_id}", this::updateMessageHandler);
+        app.get("accounts/{account_id}/messages", this::accountMessagesHandler);
 
         return app;
     }
@@ -58,10 +58,14 @@ public class SocialMediaController {
         ctx.json(MessageService.getAll());
     } 
     private void getOneMessageHandler(Context ctx) {
-        ctx.json(MessageService.get(ctx.pathParam("message_id")));
+        Message message = MessageService.get(ctx.pathParam("message_id"));
+        if (message != null) ctx.json(message);
+        else ctx.status(200);
     } 
     private void deleteMessageHandler(Context ctx) {
-        ctx.json(MessageService.delete(ctx.pathParam("message_id")));
+        Message message = MessageService.delete(ctx.pathParam("message_id"));
+        if (message != null) ctx.json(message);
+        else ctx.status(200);
     } 
     private void updateMessageHandler(Context ctx) {
         Message updated = MessageService.update(ctx.pathParam("message_id"), ctx.body());
